@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">Interface_Project</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="restaurant_array">
+        <item>Restaurant 01;Details;3.5;41.207014;-8.567126;</item>
+        <item>Restaurant 02;Details;2.7;41.203725;-8.570759;</item>
+        <item>Restaurant 03;Details;1.5;41.198331;-8.575835;</item>
+        <item>Restaurant 04;Details;3.9;41.205196;-8.563622;</item>
+        <item>Restaurant 05;Details;1.5;41.267725;-8.613892;</item>
+        <item>Restaurant 06;Details;4.2;41.265144;-8.619968;</item>
+        <item>Restaurant 07;Details;2.1;41.265569;-8.631606;</item>
+        <item>Restaurant 08;Details;3.3;41.259674;-8.619506;</item>
+        <item>Restaurant 09;Details;4.5;41.350623;-8.747129;</item>
+        <item>Restaurant 10;Details;3.2;48.841938;2.338950;</item>
+        <item>Restaurant 11;Details;4.1;40.413715;-3.727759;</item>
+        <item>Restaurant 12;Details;2.9;40.556308;14.238101;</item>
+        <item>Restaurant 13;Details;3.1;38.266393;140.871662;</item>
+        <item>Restaurant 14;Details;1.7;28.523628;-80.681803;</item>
+        <item>Restaurant 15;Details;4.8;40.711341;-73.963317;</item>
+    </string-array>
+
+
+    <string-array name="favourites_array">
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+    </string-array>
+
+</resources>
