@@ -24,6 +24,7 @@ public class FavouritesFragment extends Fragment {
 
     View view;
     ListView listView;
+    String[] favArray;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,7 +33,7 @@ public class FavouritesFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_favourites, container, false);
         listView = (ListView) view.findViewById(R.id.list_view_favourite);
 
-        ArrayList<String> arrayList = new ArrayList<String>();
+        /*ArrayList<String> arrayList = new ArrayList<String>();
 
         arrayList.add("1");
         arrayList.add("2");
@@ -51,9 +52,11 @@ public class FavouritesFragment extends Fragment {
         arrayList.add("15");
 
         String[] ar = new String[arrayList.size()];
-        ar = arrayList.toArray(ar);
+        ar = arrayList.toArray(ar);*/
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_list_item_1, ar);
+        favArray = getResources().getStringArray(R.array.favourites_array);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_list_item_1, favArray);
 
         listView.setAdapter(adapter);
 

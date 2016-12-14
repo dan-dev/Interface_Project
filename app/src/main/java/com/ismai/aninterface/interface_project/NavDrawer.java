@@ -1,6 +1,7 @@
 package com.ismai.aninterface.interface_project;
 
 import android.app.Activity;
+import android.content.ClipData;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -23,6 +24,7 @@ public class NavDrawer extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
 
+    Toolbar toolbar;
     Activity ac;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,10 @@ public class NavDrawer extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });*/
+        //toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //MenuItem item = (MenuItem) findViewById(R.id.action_settings);
+        //item.setVisible(false);
+        //toolbar.setVisibility(View.INVISIBLE);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -55,6 +61,7 @@ public class NavDrawer extends AppCompatActivity
         toggle.syncState();
 
         invalidateOptionsMenu();
+
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -73,12 +80,28 @@ public class NavDrawer extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        return false;
+
+        getMenuInflater().inflate(R.menu.nav_drawer, menu);
+        return true;
+        //return false;
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        Toast.makeText(getApplicationContext(), String.valueOf("yo"), Toast.LENGTH_SHORT).show();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_layout);
+        if (fragment instanceof FavouritesFragment || fragment instanceof ResultsFragment){
+            MenuItem itm = (MenuItem) menu.findItem(R.id.action_settings);
+            itm.setVisible(true);
+            return true;
+        }
+        else{
+            MenuItem itm = (MenuItem) menu.findItem(R.id.action_settings);
+            itm.setVisible(false);
+            return true;
+        }
+
+        /*Toast.makeText(getApplicationContext(), String.valueOf("yo"), Toast.LENGTH_SHORT).show();
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_layout);
@@ -90,10 +113,12 @@ public class NavDrawer extends AppCompatActivity
         else{
             Toast.makeText(getApplicationContext(), String.valueOf("no"), Toast.LENGTH_SHORT).show();
             return false;
-        }
+        }*/
     }
 
-
+    public void refreshOptionsMenu(){
+        invalidateOptionsMenu();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -127,13 +152,13 @@ public class NavDrawer extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            ActivityCompat.invalidateOptionsMenu(ac);
+
             getSupportActionBar().setTitle("Search");
             InitialFragment fragment = new InitialFragment();
             android.support.v4.app.FragmentTransaction fragmentTransaction =
                     getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_layout, fragment).addToBackStack(null).commit();
-
+            refreshOptionsMenu();
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
 
@@ -142,6 +167,7 @@ public class NavDrawer extends AppCompatActivity
             android.support.v4.app.FragmentTransaction fragmentTransaction =
                     getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_layout, fragment).addToBackStack(null).commit();
+            refreshOptionsMenu();
 
         } else if (id == R.id.nav_slideshow) {
 
@@ -150,6 +176,7 @@ public class NavDrawer extends AppCompatActivity
             android.support.v4.app.FragmentTransaction fragmentTransaction =
                     getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_layout, fragment).addToBackStack(null).commit();
+            invalidateOptionsMenu();
 
         } else if (id == R.id.nav_manage) {
 

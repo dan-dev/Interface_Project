@@ -29,13 +29,9 @@
 
 
     <string-array name="favourites_array">
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
+        <item>Restaurant 01;Details;3.5;41.207014;-8.567126;</item>
+        <item>Restaurant 06;Details;4.2;41.265144;-8.619968;</item>
+        <item>Restaurant 15;Details;4.8;40.711341;-73.963317;</item>
     </string-array>
 
 </resources>

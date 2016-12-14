@@ -1,11 +1,13 @@
 package com.ismai.aninterface.interface_project;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -40,6 +42,7 @@ public class ResultsFragment extends Fragment {
     Location locatA;
     Double maxDist;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -49,6 +52,13 @@ public class ResultsFragment extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_results, container, false);
         listView = (ListView) view.findViewById(R.id.list_view_results);
+
+        ((NavDrawer) getActivity()).refreshOptionsMenu();
+
+        //ActivityCompat.invalidateOptionsMenu();
+
+        //NavDrawer nv = new NavDrawer();
+        //nv.refreshOptionsMenu();
 
         maxDist = Double.parseDouble(getArguments().getString("ratios"));
 
@@ -75,7 +85,6 @@ public class ResultsFragment extends Fragment {
                 else {
                     arrayList.add(String.format(split[0] + " | Distance: %.2f m", dist));
                 }
-
             }
         }
 
