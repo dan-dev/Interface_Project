@@ -74,7 +74,11 @@ public class NavDrawer extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_layout);
+            getSupportActionBar().setTitle(fragment.getTag());
         }
+        refreshOptionsMenu();
     }
 
     @Override
@@ -129,14 +133,16 @@ public class NavDrawer extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-
-            Log.d("settings", " pressed");
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            Fragment frag = fragmentManager.findFragmentById(R.id.fragment_layout);
 
             getSupportActionBar().setTitle("Filter");
-
+            Bundle bundle = new Bundle();
+            bundle.putString("fragment", frag.getClass().getSimpleName());
             FilterFragment fragment = new FilterFragment();
             android.support.v4.app.FragmentTransaction fragmentTransaction =
                     getSupportFragmentManager().beginTransaction();
+            fragment.setArguments(bundle);
             fragmentTransaction.replace(R.id.fragment_layout, fragment).addToBackStack(null).commit();
 
             return true;

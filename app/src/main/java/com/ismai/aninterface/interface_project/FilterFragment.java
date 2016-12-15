@@ -9,7 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 
 /**
@@ -22,6 +24,8 @@ public class FilterFragment extends Fragment {
         // Required empty public constructor
     }
 
+    EditText range;
+
     View view;
     Spinner spn_score;
     Spinner spn_type;
@@ -32,13 +36,19 @@ public class FilterFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_filter, container, false);
+        ((NavDrawer) getActivity()).refreshOptionsMenu();
+
+        //String distance = getArguments().getString("distance");
+        final String frag = getArguments().getString("fragment");
+        range = (EditText) view.findViewById(R.id.ratious_box);
+        //range.setText(distance);
 
         spn_type = (Spinner) view.findViewById(R.id.spin_type);
         spn_score = (Spinner) view.findViewById(R.id.spin_score);
         apply = (Button) view.findViewById(R.id.button_submit);
 
         String[] types = new String[4];
-        String[] scores = new String[5];
+        final String[] scores = new String[5];
 
         types[0] = "All";
         types[1] = "Restaurants";
@@ -57,15 +67,31 @@ public class FilterFragment extends Fragment {
         apply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Bundle bundle = new Bundle();
-                //bundle.putString("search", searchContent.getText().toString());
-                ResultsFragment fragment = new ResultsFragment();
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                //fragment.setArguments(bundle);
-                fragmentTransaction.replace(R.id.fragment_layout, fragment).addToBackStack(null).commit();
+                Bundle bundle = new Bundle();
+                bundle.putString("ratios", range.getText().toString());
+                /*if (spn_score.getSelectedItem().toString().equalsIgnoreCase(scores[0])){
+                    bundle.putString("score", "0");
+                }
+                else {*/
+                    bundle.putString("score", ""+spn_score.getSelectedItemPosition());
+                //}
+                bundle.putString("type", spn_type.getSelectedItem().toString());
+
+                if (frag.equalsIgnoreCase("ResultsFragment")){
+                    ResultsFragment fragment = new ResultsFragment();
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragment.setArguments(bundle);
+                    fragmentTransaction.replace(R.id.fragment_layout, fragment).addToBackStack(null).commit();
+                }
+                else if (frag.equalsIgnoreCase("FavouritesFragment")){
+
+                }
+
             }
         });
+
+        ((NavDrawer)getActivity()).getSupportActionBar().setTitle("Filter");
 
         return view;
     }

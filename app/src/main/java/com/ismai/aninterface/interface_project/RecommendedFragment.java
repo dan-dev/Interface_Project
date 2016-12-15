@@ -57,6 +57,8 @@ public class RecommendedFragment extends Fragment {
 
         listView.setAdapter(adapter);
 
+        ((NavDrawer)getActivity()).getSupportActionBar().setTitle("Recommended");
+
         return view;
     }
 

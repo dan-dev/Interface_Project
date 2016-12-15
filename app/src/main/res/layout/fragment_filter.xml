@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:tag="F"
     tools:context="com.ismai.aninterface.interface_project.FilterFragment">
 
     <TextView
@@ -32,7 +33,7 @@
     <Spinner
         android:id="@+id/spin_type"
 
-        style="@style/spinner_style"
+        style="@android:style/Widget.Material.Spinner"
         android:layout_margin="20dp"
         android:layout_below="@+id/text2"
         android:layout_width="wrap_content"
@@ -46,7 +47,8 @@
         android:layout_below="@+id/text2"
         android:layout_toRightOf="@+id/spin_type"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        style="@android:style/Widget.Material.DropDownItem.Spinner" />
 
     <Button
         android:id="@+id/button_submit"

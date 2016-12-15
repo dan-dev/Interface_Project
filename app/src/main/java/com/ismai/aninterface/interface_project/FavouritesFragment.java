@@ -32,6 +32,7 @@ public class FavouritesFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_favourites, container, false);
         listView = (ListView) view.findViewById(R.id.list_view_favourite);
+        ((NavDrawer) getActivity()).refreshOptionsMenu();
 
         /*ArrayList<String> arrayList = new ArrayList<String>();
 
@@ -59,6 +60,8 @@ public class FavouritesFragment extends Fragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_list_item_1, favArray);
 
         listView.setAdapter(adapter);
+
+        ((NavDrawer)getActivity()).getSupportActionBar().setTitle("Favourites");
 
         return view;
     }
