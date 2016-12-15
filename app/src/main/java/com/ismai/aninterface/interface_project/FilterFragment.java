@@ -30,6 +30,7 @@ public class FilterFragment extends Fragment {
     Spinner spn_score;
     Spinner spn_type;
     Button apply;
+    Spinner spn_sort;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,12 +44,14 @@ public class FilterFragment extends Fragment {
         range = (EditText) view.findViewById(R.id.ratious_box);
         //range.setText(distance);
 
+        spn_sort = (Spinner) view.findViewById(R.id.spin_sorting);
         spn_type = (Spinner) view.findViewById(R.id.spin_type);
         spn_score = (Spinner) view.findViewById(R.id.spin_score);
         apply = (Button) view.findViewById(R.id.button_submit);
 
         String[] types = new String[4];
         final String[] scores = new String[5];
+        String[] sorting = new String[5];
 
         types[0] = "All";
         types[1] = "Restaurants";
@@ -61,6 +64,13 @@ public class FilterFragment extends Fragment {
         scores[3] = "Higher than 3 stars";
         scores[4] = "Higher than 4 stars";
 
+        sorting[0] = "None";
+        sorting[1] = "Score";
+        sorting[2] = "Distance";
+        sorting[3] = "Favourites";
+        sorting[4] = "Price";
+
+        spn_sort.setAdapter(new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_list_item_1, sorting));
         spn_type.setAdapter(new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_list_item_1, types));
         spn_score.setAdapter(new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_list_item_1, scores));
 
@@ -87,7 +97,6 @@ public class FilterFragment extends Fragment {
                 else if (frag.equalsIgnoreCase("FavouritesFragment")){
 
                 }
-
             }
         });
 
