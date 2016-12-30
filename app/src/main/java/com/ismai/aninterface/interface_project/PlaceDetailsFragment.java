@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.concurrent.ExecutionException;
 
 
@@ -49,13 +51,30 @@ public class PlaceDetailsFragment extends Fragment {
         description = (TextView) view.findViewById(R.id.details_place);
         button = (Button) view.findViewById(R.id.button_go_place);
 
+        //String data = getArguments().getString("data");
 
-        String data = getArguments().getString("data");
+        final Place place = getArguments().getParcelable("place");
 
-        final String[] split = data.split(";");
+        Picasso.with(getContext()).load(place.getImageLink()).placeholder(R.drawable.thumbnail).into(image);
+        description.setText(place.getDescription());
+        score.setText("Score: " + place.getScore());
+        contacts.setText("Contact: " + place.getContact());
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.pt/maps/@"+ place.getLatitude() +","+ place.getLongitude() +",17z"));
+                startActivity(browserIntent);
+            }
+        });
+
+        ((NavDrawer)getActivity()).getSupportActionBar().setTitle(place.getName());
+
+        /*final String[] split = data.split(";");
+
+        Picasso.with(getContext()).load(split[6]).placeholder(R.drawable.thumbnail).into(image);
 
         try {
-            Bitmap bitmap = (new WebDataHandler().execute(split[6]).get());
+            Bitmap bitmap = (new WebDataHandler(image).execute(split[6]).get());
             image.setImageBitmap(bitmap);
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -74,7 +93,7 @@ public class PlaceDetailsFragment extends Fragment {
             }
         });
 
-        ((NavDrawer)getActivity()).getSupportActionBar().setTitle(split[0]);
+        ((NavDrawer)getActivity()).getSupportActionBar().setTitle(split[0]);*/
 
         return view;
     }

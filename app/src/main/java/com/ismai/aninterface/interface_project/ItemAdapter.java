@@ -13,13 +13,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-public class ItemAdapter extends ArrayAdapter<String>{
+public class ItemAdapter extends ArrayAdapter<Place>{
 
     Context context;
     String[] imageStrings;
@@ -29,8 +31,7 @@ public class ItemAdapter extends ArrayAdapter<String>{
 
     LayoutInflater inflater;
 
-
-    public ItemAdapter(Context context, ArrayList<String> items /*String[] imageStrings, String[] titleStrings,
+    public ItemAdapter(Context context, ArrayList<Place> items /*String[] imageStrings, String[] titleStrings,
                        String[] scoreStrings, String[] distanceStrings */)
     {
         //super(context, R.layout.listview_item_layout, titleStrings);
@@ -41,15 +42,14 @@ public class ItemAdapter extends ArrayAdapter<String>{
         ArrayList<String> scoreStrings = new ArrayList<String>();
         ArrayList<String> distanceStrings = new ArrayList<String>();
 
-        for (String s : items){
-            String[] splt = s.split(";");
-            titleStrings.add(splt[0]);
-            distanceStrings.add(splt[1]);
-            scoreStrings.add(splt[2]);
-            imageStrings.add(splt[3]);
-            //scoreStrings.add("score");
-            /*imageStrings.add("http://www.chiswickish.co.uk/blog/wp-content/uploads/2011/10/mat" +
-                    "-does-chiswick-mat-smith-photography-blog-the-cabin-restaurant-outside-dining.jpg");*/
+        for (Place place : items){
+            titleStrings.add(place.getName());
+            String distance = "";
+            if (place.getDistance() > 1000){ distance = String.format("%.2f km", place.getDistance()/1000); }
+            else { distance = String.format("%.0f m", place.getDistance()); }
+            distanceStrings.add(distance);
+            scoreStrings.add(Double.toString(place.getScore()));
+            imageStrings.add(place.getImageLink());
         }
         this.context = context;
         this.imageStrings = imageStrings.toArray(new String[imageStrings.size()]);
@@ -58,59 +58,34 @@ public class ItemAdapter extends ArrayAdapter<String>{
         this.distanceStrings = distanceStrings.toArray(new String[distanceStrings.size()]);
     }
 
-    public class ViewHolder{
+    static class ViewHolder{
         TextView title;
         TextView score;
         TextView distance;
         ImageView image;
     }
 
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        //LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        //View rowView = inflater.inflate(R.layout.listview_item_layout);
-
+        ViewHolder holder;
         if(convertView == null){
-          inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.listview_item_layout, null);
+            holder = new ViewHolder();
+            holder.title = (TextView) convertView.findViewById(R.id.title_text_item);
+            holder.score = (TextView) convertView.findViewById(R.id.score_text_item);
+            holder.distance = (TextView) convertView.findViewById(R.id.distance_text_item);
+            holder.image = (ImageView) convertView.findViewById(R.id.image_item);
+            convertView.setTag(holder);
         }
-
-        ViewHolder holder = new ViewHolder();
-
-        holder.title = (TextView) convertView.findViewById(R.id.title_text_item);
-        holder.score = (TextView) convertView.findViewById(R.id.score_text_item);
-        holder.distance = (TextView) convertView.findViewById(R.id.distance_text_item);
-        holder.image = (ImageView) convertView.findViewById(R.id.image_item);
-
+        else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+        String img = imageStrings[position];
         holder.title.setText("Name: " + titleStrings[position]);
         holder.distance.setText("Distance: " + distanceStrings[position]);
         holder.score.setText("Score: " + scoreStrings[position]);
-        try {
-            //Bitmap bitmap = ( new WebDataHandler().execute(imageStrings[position]).get());
-
-            WebDataHandler web = new WebDataHandler();
-            //web.setContext(getContext());
-            Bitmap bitmap = ( web.execute(imageStrings[position]).get());
-            holder.image.setImageBitmap(bitmap);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        /*
-        try {
-            Bitmap bitmap = BitmapFactory.decodeStream((InputStream)new URL(imageStrings[position]).getContent());
-            holder.image.setImageBitmap(bitmap);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-        //holder.image.setImageResource();
-
-
+        Picasso.with(context).load(img).fit().placeholder(R.drawable.thumbnail).into(holder.image);
         return convertView;
     }
-
-
-
 }

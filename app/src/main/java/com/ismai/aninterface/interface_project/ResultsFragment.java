@@ -24,6 +24,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 
 
 /**
@@ -60,62 +63,67 @@ public class ResultsFragment extends Fragment {
         locatA.setLatitude(41.267825);
         locatA.setLongitude(-8.617091);
 
-        restaurant_array_list = getResources().getStringArray(R.array.restaurant_array);
+        final ArrayList<Place> places = getPlaces();
 
-        final ArrayList<String> arrayList = new ArrayList<String>();
+        Collections.sort(places, new Comparator<Place>() {
+            @Override
+            public int compare(Place p1, Place p2) {
+                if (p1.getDistance() > p2.getDistance())
+                    return 1;
+                if (p1.getDistance() < p2.getDistance())
+                    return -1;
+                return 0;
+            }
+        });
 
-        for (String s : restaurant_array_list) {
-            String[] split = s.split(";");
-            if(Double.parseDouble(split[2]) >= score){
-                Log.d("++++++++++++++++++++", split[0]);
-                Location locatTemp = new Location("temp");
-                locatTemp.setLatitude(Double.parseDouble(split[3]));
-                locatTemp.setLongitude(Double.parseDouble(split[4]));
-                double dist = locatA.distanceTo(locatTemp);
-                if(dist <= maxDist){
-                    if (dist > 1000){
-                        dist = dist / 1000;
-                        arrayList.add(String.format(split[0] + "; %.2f km;" + split[2] + ";" + split[6], dist));
-                    }
-                    else {
-                        arrayList.add(String.format(split[0] + "; %.2f m;" + split[2] + ";" + split[6], dist));
-                    }
-                }
+        Iterator<Place> placeIterator = places.iterator();
+
+        while (placeIterator.hasNext()){
+            Place place = placeIterator.next();
+            if (place.getDistance() > maxDist || place.getScore() < score ){
+                placeIterator.remove();
             }
         }
 
-        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_list_item_1, arrayList);
-
-        ItemAdapter adapter = new ItemAdapter(view.getContext(), arrayList);
+        ItemAdapter adapter = new ItemAdapter(view.getContext(), places);
 
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //Log.d("-----------------das: ", ""+i);
-            String itm = arrayList.get(i);
-            String[] splt = itm.split(";");
-            for (String s : restaurant_array_list) {
-                if(s.startsWith(splt[0])){
-                    Bundle bundle = new Bundle();
-                    bundle.putString("data", s);
-                    PlaceDetailsFragment fragment = new PlaceDetailsFragment();
-                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                    android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragment.setArguments(bundle);
-                    fragmentTransaction.replace(R.id.fragment_layout, fragment).addToBackStack(null).commit();
-
-                    //String[] split = s.split(";");
-                    //Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.pt/maps/@"+ split[3] +","+ split[4] +",17z"));
-                    //startActivity(browserIntent);
-                }
-            }
+                Place place = places.get(i);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("place", place);
+                PlaceDetailsFragment fragment = new PlaceDetailsFragment();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragment.setArguments(bundle);
+                fragmentTransaction.replace(R.id.fragment_layout, fragment).addToBackStack(null).commit();
             }
         });
 
         ((NavDrawer)getActivity()).getSupportActionBar().setTitle("Results");
 
         return view;
+    }
+
+    private ArrayList<Place> getPlaces(){
+        restaurant_array_list = getResources().getStringArray(R.array.restaurant_array);
+
+        ArrayList<Place> places = new ArrayList<Place>();
+
+        final ArrayList<String> arrayList = new ArrayList<String>();
+
+        for (String s : restaurant_array_list) {
+            String[] split = s.split(";");
+            Location locatTemp = new Location("temp");
+            locatTemp.setLatitude(Double.parseDouble(split[3]));
+            locatTemp.setLongitude(Double.parseDouble(split[4]));
+            double dist = locatA.distanceTo(locatTemp);
+            Place place = new Place(split[0], split[1], Double.parseDouble(split[2]), Double.parseDouble(split[3]), Double.parseDouble(split[4]), dist, split[5], split[6]);
+            places.add(place);
+        }
+        return places;
     }
 }
