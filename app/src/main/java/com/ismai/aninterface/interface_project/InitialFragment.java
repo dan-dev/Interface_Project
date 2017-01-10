@@ -1,39 +1,30 @@
 package com.ismai.aninterface.interface_project;
 
-
-import android.app.Activity;
-import android.content.Intent;
-import android.location.Location;
-import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.Toast;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class InitialFragment extends Fragment {
-
 
     public InitialFragment() {
         // Required empty public constructor
     }
 
+    double longitude = -8.617091;
+    double latitude = 41.267825;
+
+    LocationHandler locationHandler;
     View view;
     Button go_button;
     Button get_location;
     EditText searchContent;
     EditText ratiosContent;
-    //float dist;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,7 +41,10 @@ public class InitialFragment extends Fragment {
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putString("ratios", ratiosContent.getText().toString());
-                bundle.putString("score", "0");
+                bundle.putDouble("score", 0);
+                bundle.putString("sort", "None");
+                bundle.putDouble("lat", latitude);
+                bundle.putDouble("lon", longitude);
                 ResultsFragment fragment = new ResultsFragment();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -63,22 +57,20 @@ public class InitialFragment extends Fragment {
         get_location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.pt/maps/place/Restaurante+Madureira's/@41.207084,-8.5668552,20.08z/data=!4m5!3m4!1s0x0:0xe168a8b4893d40b7!8m2!3d41.2070522!4d-8.5670024?hl=en"));
-                //startActivity(browserIntent);
-                //LocationManager lm = (LocationManager)getSystemService()
+                locationHandler = new LocationHandler(getContext());
+                if(locationHandler.canGetLocation()){
+                    latitude = locationHandler.getLatitude();
+                    longitude = locationHandler.getLongitude();
 
+                    Toast.makeText(getContext(), "Your Location is - \nLat: "
+                            + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+
+                    //locationHandler.stopUsingGPS();
+                }else{
+                    locationHandler.showSettingsAlert();
+                }
             }
         });
-        /*
-        Location locatA = new Location("A");
-        locatA.setLatitude(41.207014);
-        locatA.setLongitude(-8.567125);
-
-        Location locatB = new Location("B");
-        locatB.setLatitude(41.204615);
-        locatB.setLongitude(-8.555773);
-
-        dist = locatA.distanceTo(locatB);*/
 
         return view;
     }

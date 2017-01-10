@@ -1,26 +1,13 @@
 package com.ismai.aninterface.interface_project;
 
-
-import android.app.Activity;
-import android.content.Intent;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -29,11 +16,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class ResultsFragment extends Fragment {
-
 
     public ResultsFragment() {
         // Required empty public constructor
@@ -44,7 +27,8 @@ public class ResultsFragment extends Fragment {
     String[] restaurant_array_list;
     Location locatA;
     Double maxDist;
-    int score;
+    Double score;
+    String sorting;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,24 +41,44 @@ public class ResultsFragment extends Fragment {
         ((NavDrawer) getActivity()).refreshOptionsMenu();
 
         maxDist = Double.parseDouble(getArguments().getString("ratios"));
-        score = Integer.parseInt(getArguments().getString("score"));
+        score = getArguments().getDouble("score");
+        sorting = getArguments().getString("sort");
 
         locatA = new Location("A");
-        locatA.setLatitude(41.267825);
-        locatA.setLongitude(-8.617091);
+        locatA.setLatitude(getArguments().getDouble("lat"));
+        locatA.setLongitude(getArguments().getDouble("lon"));
 
         final ArrayList<Place> places = getPlaces();
 
-        Collections.sort(places, new Comparator<Place>() {
-            @Override
-            public int compare(Place p1, Place p2) {
-                if (p1.getDistance() > p2.getDistance())
-                    return 1;
-                if (p1.getDistance() < p2.getDistance())
-                    return -1;
-                return 0;
-            }
-        });
+        if (sorting == "None") {
+
+        } else if (sorting == "Score") {
+            Collections.sort(places, new Comparator<Place>() {
+                @Override
+                public int compare(Place p1, Place p2) {
+                    if (p1.getScore() < p2.getScore())
+                        return 1;
+                    if (p1.getScore() > p2.getScore())
+                        return -1;
+                    return 0;
+                }
+            });
+        } else if (sorting == "Distance") {
+            Collections.sort(places, new Comparator<Place>() {
+                @Override
+                public int compare(Place p1, Place p2) {
+                    if (p1.getDistance() > p2.getDistance())
+                        return 1;
+                    if (p1.getDistance() < p2.getDistance())
+                        return -1;
+                    return 0;
+                }
+            });
+        } else if (sorting == "Favourites") {
+
+        } else if (sorting == "Prince") {
+
+        }
 
         Iterator<Place> placeIterator = places.iterator();
 
