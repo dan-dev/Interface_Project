@@ -6,73 +6,54 @@
     tools:context="com.ismai.aninterface.interface_project.FilterFragment">
 
     <TextView
-        android:id="@+id/text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Filters" />
-
-    <TextView
         android:id="@+id/text2"
         android:text="Distance: "
-
+        android:layout_centerHorizontal="true"
         android:paddingTop="15dp"
-        android:layout_below="@+id/text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content" />
 
     <EditText
         android:id="@+id/ratious_box"
-
+        android:gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
         android:inputType="number"
-        android:layout_toRightOf="@+id/text2"
-        android:layout_below="@+id/text"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content" />
+        android:layout_below="@+id/text2"
+        android:layout_height="wrap_content"
+        android:layout_width="200dp" />
 
     <Spinner
         android:id="@+id/spin_type"
-
-        style="@android:style/Widget.Material.Spinner"
+        android:layout_centerHorizontal="true"
         android:layout_margin="20dp"
-        android:layout_below="@+id/text2"
+        android:layout_below="@+id/ratious_box"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
-    <Spinner
-        android:id="@+id/spin_score"
-
-
-        android:layout_margin="20dp"
-        android:layout_below="@+id/text2"
-        android:layout_toRightOf="@+id/spin_type"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@android:style/Widget.Material.Spinner" />
-
-    <TextView
-        android:id="@+id/sorting_text"
-        android:text="Sort by."
-
-        android:paddingTop="15dp"
-        android:layout_below="@+id/spin_score"
+    <RatingBar
+        android:id="@+id/rating_stars"
+        android:layout_centerHorizontal="true"
+        android:stepSize="0.5"
+        android:numStars="5"
+        android:layout_below="@+id/spin_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <Spinner
         android:id="@+id/spin_sorting"
-
-        android:layout_toRightOf="@+id/sorting_text"
-        android:layout_below="@+id/spin_score"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <Button
-        android:id="@+id/button_submit"
-        android:text="Apply."
-
-        android:layout_below="@+id/spin_sorting"
+        android:layout_margin="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/rating_stars"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
+    <Button
+        android:id="@+id/button_submit"
+        android:text="Apply"
+        android:layout_margin="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_width="200dp"
+        android:layout_height="50dp" />
 
 </RelativeLayout>
