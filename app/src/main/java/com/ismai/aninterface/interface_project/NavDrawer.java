@@ -2,6 +2,8 @@ package com.ismai.aninterface.interface_project;
 
 import android.app.Activity;
 import android.content.ClipData;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -20,12 +22,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import static java.security.AccessController.getContext;
+
 public class NavDrawer extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
 
     Toolbar toolbar;
     Activity ac;
+    FloatingActionButton fab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,18 +46,16 @@ public class NavDrawer extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_layout, fragment).commit();
 
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, getResources().getString(R.string.favourite_btn), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });*/
-        //toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //MenuItem item = (MenuItem) findViewById(R.id.action_settings);
-        //item.setVisible(false);
-        //toolbar.setVisibility(View.INVISIBLE);
+        });
+
+        fab.setVisibility(View.INVISIBLE);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -104,25 +107,15 @@ public class NavDrawer extends AppCompatActivity
             itm.setVisible(false);
             return true;
         }
-
-        /*Toast.makeText(getApplicationContext(), String.valueOf("yo"), Toast.LENGTH_SHORT).show();
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_layout);
-        if (fragment instanceof ResultsFragment){
-            Toast.makeText(getApplicationContext(), String.valueOf("yeah"), Toast.LENGTH_SHORT).show();
-            getMenuInflater().inflate(R.menu.nav_drawer, menu);
-            return true;
-        }
-        else{
-            Toast.makeText(getApplicationContext(), String.valueOf("no"), Toast.LENGTH_SHORT).show();
-            return false;
-        }*/
     }
 
     public void refreshOptionsMenu(){
         invalidateOptionsMenu();
     }
+
+    public void setFavVisible(){ fab.setVisibility(View.VISIBLE); }
+
+    public void setFavInvisible(){ fab.setVisibility(View.INVISIBLE); }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -151,6 +144,10 @@ public class NavDrawer extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    double latitude = 41.267825;
+    double longitude = -8.617091;
+    LocationHandler locationHandler;
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -167,29 +164,67 @@ public class NavDrawer extends AppCompatActivity
             refreshOptionsMenu();
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
+            locationHandler = new LocationHandler(this);
+            if(locationHandler.canGetLocation()){
+                latitude = locationHandler.getLatitude();
+                longitude = locationHandler.getLongitude();
 
-            getSupportActionBar().setTitle("Favourites");
-            FavouritesFragment fragment = new FavouritesFragment();
-            android.support.v4.app.FragmentTransaction fragmentTransaction =
-                    getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_layout, fragment).addToBackStack(null).commit();
-            refreshOptionsMenu();
+                Bundle bundle = new Bundle();
+                bundle.putDouble("score", 0);
+                bundle.putInt("sort", 0);
+                bundle.putDouble("lat", latitude);
+                bundle.putDouble("lon", longitude);
+
+                getSupportActionBar().setTitle("Favourites");
+                FavouritesFragment fragment = new FavouritesFragment();
+                android.support.v4.app.FragmentTransaction fragmentTransaction =
+                        getSupportFragmentManager().beginTransaction();
+                fragment.setArguments(bundle);
+                fragmentTransaction.replace(R.id.fragment_layout, fragment).addToBackStack(null).commit();
+                refreshOptionsMenu();
+
+                SharedPreferences preferences;
+                SharedPreferences.Editor editor;
+                preferences = getPreferences(Context.MODE_WORLD_WRITEABLE);
+                editor = preferences.edit();
+                editor.putString("lat", ""+latitude);
+                editor.putString("lon", ""+longitude);
+                editor.commit();
+            } else {
+                locationHandler.showSettingsAlert();
+            }
 
         } else if (id == R.id.nav_slideshow) {
 
-            getSupportActionBar().setTitle("Recommended");
-            RecommendedFragment fragment = new RecommendedFragment();
-            android.support.v4.app.FragmentTransaction fragmentTransaction =
-                    getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_layout, fragment).addToBackStack(null).commit();
-            invalidateOptionsMenu();
+            locationHandler = new LocationHandler(this);
+            if(locationHandler.canGetLocation()){
+                latitude = locationHandler.getLatitude();
+                longitude = locationHandler.getLongitude();
 
-        } else if (id == R.id.nav_manage) {
+                Bundle bundle = new Bundle();
+                bundle.putDouble("score", 0);
+                bundle.putInt("sort", 0);
+                bundle.putDouble("lat", latitude);
+                bundle.putDouble("lon", longitude);
 
-        } else if (id == R.id.nav_share) {
+                getSupportActionBar().setTitle("Favourites");
+                RecommendedFragment fragment = new RecommendedFragment();
+                android.support.v4.app.FragmentTransaction fragmentTransaction =
+                        getSupportFragmentManager().beginTransaction();
+                fragment.setArguments(bundle);
+                fragmentTransaction.replace(R.id.fragment_layout, fragment).addToBackStack(null).commit();
+                refreshOptionsMenu();
 
-        } else if (id == R.id.nav_send) {
-
+                SharedPreferences preferences;
+                SharedPreferences.Editor editor;
+                preferences = getPreferences(Context.MODE_WORLD_WRITEABLE);
+                editor = preferences.edit();
+                editor.putString("lat", ""+latitude);
+                editor.putString("lon", ""+longitude);
+                editor.commit();
+            } else {
+                locationHandler.showSettingsAlert();
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

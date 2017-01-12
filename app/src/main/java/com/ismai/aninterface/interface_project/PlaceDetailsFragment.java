@@ -1,27 +1,18 @@
 package com.ismai.aninterface.interface_project;
 
-
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.squareup.picasso.Picasso;
 
-import java.util.concurrent.ExecutionException;
-
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class PlaceDetailsFragment extends Fragment {
 
 
@@ -34,7 +25,10 @@ public class PlaceDetailsFragment extends Fragment {
     TextView contacts;
     TextView score;
     ImageView image;
+    TextView time;
+    TextView price;
 
+    Button review;
     Button button;
 
     @Override
@@ -43,6 +37,7 @@ public class PlaceDetailsFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_place_details, container, false);
         ((NavDrawer) getActivity()).refreshOptionsMenu();
+        ((NavDrawer) getActivity()).setFavVisible();
 
         image = (ImageView) view.findViewById(R.id.image_place);
 
@@ -50,15 +45,18 @@ public class PlaceDetailsFragment extends Fragment {
         contacts = (TextView) view.findViewById(R.id.contact_place);
         description = (TextView) view.findViewById(R.id.details_place);
         button = (Button) view.findViewById(R.id.button_go_place);
-
-        //String data = getArguments().getString("data");
+        review = (Button) view.findViewById(R.id.button_review);
+        time = (TextView) view.findViewById(R.id.time_place);
+        price = (TextView) view.findViewById(R.id.price_place);
 
         final Place place = getArguments().getParcelable("place");
 
         Picasso.with(getContext()).load(place.getImageLink()).placeholder(R.drawable.thumbnail).into(image);
         description.setText(place.getDescription());
-        score.setText("Score: " + place.getScore());
-        contacts.setText("Contact: " + place.getContact());
+        score.setText(getResources().getString(R.string.place_score) + place.getScore());
+        contacts.setText(getResources().getString(R.string.place_contact) + place.getContact());
+        price.setText(getResources().getString(R.string.place_price) + place.getPrice() + "€");
+        time.setText(getResources().getString(R.string.place_schedule) + place.getTime());
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,33 +67,16 @@ public class PlaceDetailsFragment extends Fragment {
 
         ((NavDrawer)getActivity()).getSupportActionBar().setTitle(place.getName());
 
-        /*final String[] split = data.split(";");
-
-        Picasso.with(getContext()).load(split[6]).placeholder(R.drawable.thumbnail).into(image);
-
-        try {
-            Bitmap bitmap = (new WebDataHandler(image).execute(split[6]).get());
-            image.setImageBitmap(bitmap);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        description.setText(split[1]);
-        score.setText("Score: " + split[2]);
-        contacts.setText("Contacts: " + split[5]);
-
-        button.setOnClickListener(new View.OnClickListener() {
+        review.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.pt/maps/@"+ split[3] +","+ split[4] +",17z"));
-                startActivity(browserIntent);
+                ReviewFragment fragment = new ReviewFragment();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_layout, fragment).addToBackStack(null).commit();
             }
         });
 
-        ((NavDrawer)getActivity()).getSupportActionBar().setTitle(split[0]);*/
-
         return view;
     }
-
 }

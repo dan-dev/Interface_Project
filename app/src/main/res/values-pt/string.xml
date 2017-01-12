@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Intital Fragment -->
+    <string name="insert_location">Insira a sua localização.</string>
+    <string name="insert_distance">Insira a distancia maxima (metros).</string>
+    <string name="get_location_gps">Buscar posição actual.</string>
+    <string name="location_set_gps">Localização definida como sua actual.</string>
+    <string name="location_set_search">Localização definida como: </string>
+
+    <!-- Filter Fragment -->
+    <string name="filter_distance">Distancia: </string>
+    <string name="filter_type">Mostrar:</string>
+    <string name="filter_order_by">Ordenar por:</string>
+    <string name="filter_apply">Aplicar</string>
+
+    <string-array name="filter_type_list">
+        <item>Todos</item>
+        <item>Restaurantes</item>
+        <item>Bares</item>
+        <item>Pontos de interesse</item>
+    </string-array>
+
+    <string-array name="filter_sorting_list">
+        <item>Nenhuma</item>
+        <item>Pontuação</item>
+        <item>Distancia</item>
+        <item>Preço</item>
+    </string-array>
+
+    <!-- Place Details Fragment -->
+    <string name="go_to_location">Ir para a localização.</string>
+    <string name="place_score">Pontuação: </string>
+    <string name="place_contact">Contacto: </string>
+    <string name="place_schedule">Horario: </string>
+    <string name="place_price">Preço de entrada: </string>
+
+    <!-- Drawer -->
+    <string name="drawer_search">Procurar</string>
+    <string name="drawer_favourite">Favoritos</string>
+    <string name="drawer_recommend">Recomendados</string>
+
+    <!-- Nav Drawer -->
+    <string name="favourite_btn">Adicionado a lista de favoritos.</string>
+
+    <!-- Item Details -->
+    <string name="item_time">Horas abertas: </string>
+    <string name="item_name">Nome: </string>
+    <string name="item_score">Pontuação: </string>
+    <string name="item_distance">Distancia: </string>
+    <string name="item_price">Preço de entrada: </string>
+
+    <!-- Review -->
+    <string name="review_submited">Submetido!</string>
+
+</resources>

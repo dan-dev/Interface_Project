@@ -12,22 +12,21 @@
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:layout_weight="1"
             android:tag="Info"
             tools:context="com.ismai.aninterface.interface_project.PlaceDetailsFragment">
 
             <ImageView
                 android:id="@+id/image_place"
-
                 android:layout_width="150dp"
                 android:layout_height="175dp" />
 
             <TextView
                 android:id="@+id/score_place"
-
                 android:layout_toRightOf="@id/image_place"
                 android:layout_width="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="5dp"
                 android:layout_height="wrap_content" />
 
             <TextView
@@ -35,6 +34,39 @@
 
                 android:layout_toRightOf="@id/image_place"
                 android:layout_below="@id/score_place"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/time_place"
+                android:layout_below="@+id/contact_place"
+                android:layout_toRightOf="@id/image_place"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/price_place"
+
+                android:layout_marginLeft="5dp"
+                android:layout_below="@+id/time_place"
+                android:layout_toRightOf="@id/image_place"
+                android:layout_marginTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/button_review"
+                android:layout_marginLeft="5dp"
+                android:text="Review"
+                android:layout_toRightOf="@id/image_place"
+                android:layout_below="@+id/price_place"
+                android:layout_marginTop="15dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -50,8 +82,7 @@
 
     <Button
         android:id="@+id/button_go_place"
-        android:text="Go to location."
-
+        android:text="@string/go_to_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0"

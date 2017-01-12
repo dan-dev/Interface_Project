@@ -4,10 +4,12 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -28,7 +30,8 @@ public class ResultsFragment extends Fragment {
     Location locatA;
     Double maxDist;
     Double score;
-    String sorting;
+    int sorting;
+    int type;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,45 +42,86 @@ public class ResultsFragment extends Fragment {
         listView = (ListView) view.findViewById(R.id.list_view_results);
 
         ((NavDrawer) getActivity()).refreshOptionsMenu();
+        ((NavDrawer) getActivity()).setFavInvisible();
 
         maxDist = Double.parseDouble(getArguments().getString("ratios"));
         score = getArguments().getDouble("score");
-        sorting = getArguments().getString("sort");
+        sorting = getArguments().getInt("sort");
+        type = getArguments().getInt("type");
 
         locatA = new Location("A");
         locatA.setLatitude(getArguments().getDouble("lat"));
         locatA.setLongitude(getArguments().getDouble("lon"));
 
-        final ArrayList<Place> places = getPlaces();
+        ArrayList<Place> tempPlaces = getPlaces();
+        ArrayList<Place> filterPlaces = new ArrayList<>();
 
-        if (sorting == "None") {
-
-        } else if (sorting == "Score") {
-            Collections.sort(places, new Comparator<Place>() {
-                @Override
-                public int compare(Place p1, Place p2) {
-                    if (p1.getScore() < p2.getScore())
-                        return 1;
-                    if (p1.getScore() > p2.getScore())
-                        return -1;
-                    return 0;
+        if (type == 0){
+            filterPlaces = tempPlaces;
+        } else if (type == 1){
+            for(Place p : tempPlaces){
+                if (p.getType().equals("r") ){
+                    filterPlaces.add(p);
                 }
-            });
-        } else if (sorting == "Distance") {
-            Collections.sort(places, new Comparator<Place>() {
-                @Override
-                public int compare(Place p1, Place p2) {
-                    if (p1.getDistance() > p2.getDistance())
-                        return 1;
-                    if (p1.getDistance() < p2.getDistance())
-                        return -1;
-                    return 0;
+            }
+        } else if (type == 2){
+            for(Place p : tempPlaces){
+                if (p.getType().equals("b") ){
+                    filterPlaces.add(p);
                 }
-            });
-        } else if (sorting == "Favourites") {
+            }
+        } else if (type == 3){
+            for(Place p : tempPlaces){
+                if (p.getType().equals("l") ){
+                    filterPlaces.add(p);
+                }
+            }
+        }
 
-        } else if (sorting == "Prince") {
+        final ArrayList<Place> places = filterPlaces;
 
+        switch (sorting){
+            case 0:
+                break;
+            case 1:
+                Collections.sort(places, new Comparator<Place>() {
+                    @Override
+                    public int compare(Place p1, Place p2) {
+                        if (p1.getScore() < p2.getScore())
+                            return 1;
+                        if (p1.getScore() > p2.getScore())
+                            return -1;
+                        return 0;
+                    }
+                });
+                break;
+            case 2:
+                Collections.sort(places, new Comparator<Place>() {
+                    @Override
+                    public int compare(Place p1, Place p2) {
+                        if (p1.getDistance() > p2.getDistance())
+                            return 1;
+                        if (p1.getDistance() < p2.getDistance())
+                            return -1;
+                        return 0;
+                    }
+                });
+                break;
+            case 3:
+                Collections.sort(places, new Comparator<Place>() {
+                    @Override
+                    public int compare(Place p1, Place p2) {
+                        if (p1.getPrice() > p2.getPrice())
+                            return 1;
+                        if (p1.getPrice() < p2.getPrice())
+                            return -1;
+                        return 0;
+                    }
+                });
+                break;
+            default:
+
+                break;
         }
 
         Iterator<Place> placeIterator = places.iterator();
@@ -113,7 +157,7 @@ public class ResultsFragment extends Fragment {
     }
 
     private ArrayList<Place> getPlaces(){
-        restaurant_array_list = getResources().getStringArray(R.array.restaurant_array);
+        restaurant_array_list = getResources().getStringArray(R.array.places_array);
 
         ArrayList<Place> places = new ArrayList<Place>();
 
@@ -125,7 +169,7 @@ public class ResultsFragment extends Fragment {
             locatTemp.setLatitude(Double.parseDouble(split[3]));
             locatTemp.setLongitude(Double.parseDouble(split[4]));
             double dist = locatA.distanceTo(locatTemp);
-            Place place = new Place(split[0], split[1], Double.parseDouble(split[2]), Double.parseDouble(split[3]), Double.parseDouble(split[4]), dist, split[5], split[6]);
+            Place place = new Place(split[0], split[1], Double.parseDouble(split[2]), Double.parseDouble(split[3]), Double.parseDouble(split[4]), dist, split[5], split[6], split[7], split[8], Double.parseDouble(split[9]));
             places.add(place);
         }
         return places;

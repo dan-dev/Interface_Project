@@ -1,16 +1,25 @@
 package com.ismai.aninterface.interface_project;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.Spinner;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class FilterFragment extends Fragment {
 
@@ -41,19 +50,12 @@ public class FilterFragment extends Fragment {
         spn_type = (Spinner) view.findViewById(R.id.spin_type);
         apply = (Button) view.findViewById(R.id.button_submit);
 
-        String[] types = new String[4];
-        String[] sorting = new String[5];
+        String[] types;
+        String[] sorting;
 
-        types[0] = "All";
-        types[1] = "Restaurants";
-        types[2] = "Bars";
-        types[3] = "Landmarks";
+        types = getResources().getStringArray(R.array.filter_type_list);
 
-        sorting[0] = "None";
-        sorting[1] = "Score";
-        sorting[2] = "Distance";
-        sorting[3] = "Favourites";
-        sorting[4] = "Price";
+        sorting = getResources().getStringArray(R.array.filter_sorting_list);
 
         spn_sort.setAdapter(new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_list_item_1, sorting));
         spn_type.setAdapter(new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_list_item_1, types));
@@ -61,11 +63,24 @@ public class FilterFragment extends Fragment {
         apply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                SharedPreferences preferences;
+                preferences = getActivity().getPreferences(Context.MODE_WORLD_READABLE);
+                ((NavDrawer) getActivity()).setFavInvisible();
+
                 Bundle bundle = new Bundle();
-                bundle.putString("ratios", range.getText().toString());
                 bundle.putDouble("score", rating.getRating());
-                bundle.putString("sort", spn_sort.getSelectedItem().toString());
-                bundle.putString("type", spn_type.getSelectedItem().toString());
+                bundle.putDouble("lat", Double.parseDouble(preferences.getString("lat", "0")));
+                bundle.putDouble("lon", Double.parseDouble(preferences.getString("lon", "0")));
+
+                bundle.putInt("sort", spn_sort.getSelectedItemPosition());
+                bundle.putInt("type", spn_type.getSelectedItemPosition());
+
+                if (range.getText().toString() == ""){
+                    bundle.putString("ratios", "1000");
+                } else {
+                    bundle.putString("ratios", range.getText().toString());
+                }
 
                 if (frag.equalsIgnoreCase("ResultsFragment")){
                     ResultsFragment fragment = new ResultsFragment();
@@ -75,7 +90,11 @@ public class FilterFragment extends Fragment {
                     fragmentTransaction.replace(R.id.fragment_layout, fragment).addToBackStack(null).commit();
                 }
                 else if (frag.equalsIgnoreCase("FavouritesFragment")){
-
+                    FavouritesFragment fragment = new FavouritesFragment();
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragment.setArguments(bundle);
+                    fragmentTransaction.replace(R.id.fragment_layout, fragment).addToBackStack(null).commit();
                 }
             }
         });

@@ -4,4 +4,13 @@
     <color name="colorPrimaryDark">#562100</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorWhite">#ffffff</color>
+
+    <color name="colorRestaurant">#93c8ec</color>
+    <color name="colorBar">#9eefbc</color>
+    <color name="colorLandmark">#f1aec0</color>
+
+    <color name="color_open">#2fff00</color>
+    <color name="color_closed">#ff0044</color>
+
+    <color name="color_text">#d2d1d1</color>
 </resources>

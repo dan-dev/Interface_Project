@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Intital Fragment -->
+    <string name="insert_location">Insert your location.</string>
+    <string name="insert_distance">Insert your max distance(meters).</string>
+    <string name="get_location_gps">Get Current Position</string>
+    <string name="location_set_gps">Location set as your current position.</string>
+    <string name="location_set_search">Location set as: </string>
+
+    <!-- Filter Fragment -->
+    <string name="filter_distance">Distance: </string>
+    <string name="filter_type">Show:</string>
+    <string name="filter_order_by">Order by:</string>
+    <string name="filter_apply">Apply</string>
+
+    <string-array name="filter_type_list">
+        <item>All</item>
+        <item>Restaurants</item>
+        <item>Bars</item>
+        <item>Landmarks</item>
+    </string-array>
+
+    <string-array name="filter_sorting_list">
+        <item>None</item>
+        <item>Score</item>
+        <item>Distance</item>
+        <item>Price</item>
+    </string-array>
+
+    <!-- Place Details Fragment -->
+    <string name="go_to_location">Go to location.</string>
+    <string name="place_score">Score: </string>
+    <string name="place_contact">Contact: </string>
+    <string name="place_schedule">Schedule: </string>
+    <string name="place_price">Entry price: </string>
+
+    <!-- Drawer -->
+    <string name="drawer_search">Search</string>
+    <string name="drawer_favourite">Favourites</string>
+    <string name="drawer_recommend">Recommended</string>
+
+    <!-- Nav Drawer -->
+    <string name="favourite_btn">Place added to favourite list.</string>
+
+    
+    <!-- Item Details -->
+    <string name="item_time">Open hours: </string>
+    <string name="item_name">Name: </string>
+    <string name="item_score">Score: </string>
+    <string name="item_distance">Distance: </string>
+    <string name="item_price">Entry price: </string>
+
+    <!-- Review -->
+    <string name="review_submited">Submitted!</string>
+
+
+</resources>
